@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <title>給最愛的徐小寶</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #fdf6e3;
+      font-family: "Microsoft JhengHei", sans-serif;
+    }
+
+    .password-box {
+      text-align: center;
+    }
+
+    input[type="password"] {
+      padding: 10px;
+      font-size: 16px;
+      border: 2px solid #555;
+      border-radius: 5px;
+    }
+
+    button {
+      padding: 10px 15px;
+      font-size: 16px;
+      margin-left: 10px;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      background: #ffb6c1;
+    }
+
+    .error {
+      color: red;
+      margin-top: 10px;
+      display: none;
+    }
+
+    .envelope {
+      width: 300px;
+      height: 200px;
+      background: #ffb6c1;
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.5s;
+      display: none;
+    }
+
+    .envelope:before, .envelope:after {
+      content: "";
+      position: absolute;
+      width: 0;
+      height: 0;
+      border-style: solid;
+    }
+
+    .envelope:before {
+      top: 0;
+      left: 0;
+      border-width: 0 150px 100px 150px;
+      border-color: transparent transparent #ff69b4 transparent;
+    }
+
+    .envelope:after {
+      bottom: 0;
+      left: 0;
+      border-width: 100px 150px 0 150px;
+      border-color: #ff69b4 transparent transparent transparent;
+    }
+
+    .letter {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      right: 20px;
+      bottom: 20px;
+      background: white;
+      padding: 20px;
+      display: none;
+      text-align: center;
+      line-height: 1.6;
+      border-radius: 5px;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="password-box" id="login">
+    <h2>還記得我們什麼時候在一起的咪💌</h2>
+    <input type="password" id="password" placeholder="輸入密碼">
+    <button onclick="checkPassword()">開啟</button>
+    <p id="error" class="error">密碼錯誤，請再試一次！</p>
+  </div>
+
+  <div class="envelope" id="envelope" onclick="openLetter()"></div>
+  <div class="letter" id="letter"></div>
+
+  <script>
+    const secretMessage = `
+      <h2>To.徐小寶 ❤️</h2>
+      <p>
+   
+        我們在一起算來已經三個月啦~<br>
+	時間過得真快，想當初還有人不太看好我們<br>
+	但現在也用行動證明，不只這三個月，我們還要在一起好久好久！<br>
+	希望往後餘生都能有你的陪伴(´,,•ω•,,)♡<br>
+	這世界那麼大，很幸運的遇見了你<br>
+	如果那天我同事沒跟我換假，如果我沒答應那場麻將局邀約的話，是不是就沒辦法認識你了<br>
+	感謝命運的安排讓我遇見了那麼好的你~<br>
+	唯一的遺憾就是沒能更早與你相識吧(｡ŏ_ŏ)少了很多能相處的時間<br>
+	畢竟你現在比我更快一步出社會，很常覺得我們之間的距離好遠，不只實際距離上的，而是現實總總層面上積累的......<br>
+	但你總是很努力地將這份距離感縮短，和你在一起我能感受到滿滿的幸福<br>
+	即使我們現在隔著294km的距離，你有空閒時間都會打給我，與我分享生活瑣事，和你通話的時間，是我平日最大的快樂<br>
+	聽著你的聲音，能使我安心許多<br>
+	我承認我是個非常沒有安全感的人，佔有慾莫名其妙很強，也是個大醋罈子<br>
+	很常想東想西，很怕你不要我，去找其他漂亮妹妹，你說的小雞八話也會當真<br>
+	因為我真的好愛好愛你，沒辦法想像沒有你的陪伴我該如何是好<br>
+	即使褪去了熱戀期的濾鏡，我也如當初般愛你，甚至愛得更深了<br>
+	一段完美的感情，並不是一對完美的人結合，而是一對不完美的人，學會接受彼此的不完美<br>
+	希望寶貝能包容我的不完美，倘若接下來的日子裡，有什麼需要改進的，泥也可以跟我說說!<br>
+	畢竟日子是要我們雙方去經營的，有你一同的未來，我也引期盼著<br>
+	有你的每個明天，彷彿都變得很不一樣，不再只是單調枯燥的生活<br>
+	到現在也逐漸習慣和你道別，從當初會哭得唏哩嘩啦，現在只會感到小小傷心而已<br>
+	畢竟很想要每個夜晚都和你相擁入眠，就算作惡夢也不會害怕，畢竟身後有你這個強大的後盾在<br>
+	你不在我身邊的日子中，我也有乖乖聽寶貝你的話，好好地照顧自己<br>
+	泥也要乖乖呦~<br>
+	謝謝寶每次放假都會搭好久的車車來找我，花了不少時間的錢錢QQ <br>	
+	你總說我值得被這樣對待，真的好暖心，你的愛從不是說說而已，而是行動實踐<br>
+	好喜歡你在我身邊的感覺，能夠摸你臉臉，親親你，抱抱你，還能聞你身上的味道<br>
+	與你在一起的時候，總希望時間可以走慢點，真的好捨不得跟你道別<br>
+	但就算我迷有休假，我還是希望寶貝可以回台中陪陪家人<br>
+	不希望因為我的關係沒有回去，不然泥一個月只回去一周感覺太少了<br>
+	泥馬麻也說過我太黏，還不會同意我們結婚的事，如果這樣的話，好像就可以體現我沒有那麼黏了(? <br>
+	謝謝寶貝讓我認識你的家人和朋友們，讓我感受到不同的愛<br>
+	如果我的把拔馬麻還在的話，我也一定會讓你認識他們，跟他們分享我有一個很愛我的男朋友，他們會為我們感到很開心的喔<br>
+	我把拔ㄚ也跟我一樣喜歡講很爛的笑話，你們也會成為好朋友的哈哈哈~<br>
+	因為家庭的關係我很自卑，渴望被愛，或許出生不幸，我也無法選擇<br>
+	你不一樣的是，你是我一生中唯一親自挑選的家人<br>
+	想和你有個幸福的小家，養隻狗狗叫旺財(? 之類的<br>
+	不會因為在一起時間久沒了新鮮感選擇離開，而是會與你體驗更多新事物<br>
+	沒有你的未來我不想擁有，我真的很愛你❤️<br>
+	願我如星君如月，夜夜流光相皎潔<br>
+	最愛你了ㄡ徐代勝~ヾ(●゜▽゜●)♡
+	
+	
+		
+	
+
+      </p>
+    `;
+
+    function checkPassword() {
+      const input = document.getElementById("password").value;
+      if (input === "0617") {
+        document.getElementById("login").style.display = "none";
+        document.getElementById("envelope").style.display = "block";
+      } else {
+        document.getElementById("error").style.display = "block";
+      }
+    }
+
+    function openLetter() {
+      document.getElementById("envelope").style.display = "none";
+      const letter = document.getElementById("letter");
+      letter.innerHTML = secretMessage;
+      letter.style.display = "block";
+    }
+  </script>
+</body>
+</html>
